@@ -13,11 +13,6 @@ from pandasgui import show
 
 sns.set_theme()
 
-# def extract_data(pdf_path):
-#     with pdfplumber.open(pdf_path) as f:
-#         all_page_tables = [page.extract_tables() for page in f.pages]
-#         return [x for entry in all_page_tables for x in entry]
-
 pdfs_short = 'pdfs/short'
 pdf_free = 'pdfs/free'
 
@@ -166,7 +161,6 @@ for i, skater in enumerate(skaters_list):
         data.append(row)
 
 df = pd.DataFrame(data)
-#display(df)
 show(df)
 
 
