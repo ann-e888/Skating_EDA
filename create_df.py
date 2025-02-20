@@ -134,12 +134,18 @@ skater_performance = list(zip(elements, calls, scores))
 
 short_skater_count = sum(short_entries_num)
 
+""" this part calculates how many elements in the skater_performance list should be assigned to particular skater 
+ skaters lists is the same size as the number of tables extracted from short programs pdfs
+ for short program there are 7 elements for one skater
+ for free program there are 12 elements for one skater 
+ the cumulative indices list holds the indices for start and finish of one performance """
+
 skater_segment_sizes = []
-for i in range(len(skaters_list)):
-    if i < short_skater_count:
+for i in range(len(skaters_list)): 
+    if i < short_skater_count:     
         skater_segment_sizes.append(7)  
     else:
-        skater_segment_sizes.append(12)
+        skater_segment_sizes.append(12) 
 
 cumulative_indices = np.cumsum([0] + skater_segment_sizes)
 
