@@ -27,37 +27,47 @@ def extract_data(pdf_paths):
     all_entries = []
     short_entries_num = []
     free_entries_num = []
-    for pdf_path in pdf_paths:
-        with pdfplumber.open(pdf_path) as f:
-            all_page_tables = [page.extract_tables() for page in f.pages]
-            tables = [x for entry in all_page_tables for x in entry]
-            all_entries.extend(tables)
-
-            if 'short' in pdf_path:
-              short_entries_num.append(len(tables))
-            else:
-              free_entries_num.append(len(tables)) 
+    pdf_table_map = {}  
+    index_counter = 0 
     
-    return all_entries, short_entries_num, free_entries_num
+    for pdf_path in pdf_paths:
+        try:
+            with pdfplumber.open(pdf_path) as f:
+                all_page_tables = [page.extract_tables() for page in f.pages]
+                tables = [x for entry in all_page_tables for x in entry]
+                all_entries.extend(tables)
 
-single_entries, short_entries_num, free_entries_num = extract_data(all_paths)
+                if 'short' in pdf_path:
+                    short_entries_num.append(len(tables))
+                else:
+                    free_entries_num.append(len(tables)) 
+                for table in tables:
+                  pdf_table_map[index_counter] = pdf_path  
+                  index_counter += 1 
+        except Exception as e:
+            print(f"Error processing {pdf_path}: {e}")
+    
+    return all_entries, short_entries_num, free_entries_num, pdf_table_map
+
+single_entries, short_entries_num, free_entries_num, pdf_table_map = extract_data(all_paths)
 print(sum(short_entries_num))
 print(sum(free_entries_num))
 
-second_to_remove = '# Executed Elements ofnI Base Scores of GOE J1 J2 J3 J4 J5 J6 J7 J8 J9 Ref.\nValue Panel'
-third_to_remove = 'Deductions: '
+
+for i in range(len(single_entries)):
+    if len(single_entries[i]) <= 2:
+        print(f"Problem with table {i} in a PDF {pdf_table_map[i]}. It has only {len(single_entries[i])} sublists.")
+
 
 for i in range(len(single_entries)):
     single_entries[i][0][0] = single_entries[i][0][0].rsplit('\n', 1)[-1]
-    single_entries[i][1][0] = single_entries[i][1][0].replace(second_to_remove, '')
-    single_entries[i][2][0] = single_entries[i][2][0].replace(third_to_remove, '')
-
+    single_entries[i][1][0] = '\n1' + single_entries[i][1][0].split('\n1', 1)[1]
+    single_entries[i][1][0] = single_entries[i][1][0].split('\nProgram')[0]
 
 single_entries_updated = []
 extracted_elements = []
 for entry in single_entries:
-  element_data = entry[1][0].split('\n')[1:]
-  del element_data[-6:]
+  element_data = entry[1][0].split('\n')[1:-1]
   single_entries_updated.append([entry[0], element_data])
   extracted_elements.append(element_data)
 
