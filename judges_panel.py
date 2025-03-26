@@ -3,6 +3,7 @@ import requests
 import os
 
 from bs4 import BeautifulSoup
+from pandasgui import show
 
 seasons = ['season2425', 'season2324', 'season2223', 'season2122']
 competitions = ['fc2025', 'fc2024', 'fc2023', 'fc2022', 'fc2021',
@@ -72,13 +73,18 @@ for url in urls:
   judges = get_judges_panel(url)
   print(judges)
 
-for url in urls:
-  judges = get_judges_panel(url)
-  print(judges)
-
   if judges:
     judges_panels_list.append(judges)
     count += 1
 
-print(count)
-print(judges_panels_list)
+#print(count)
+
+for panel in judges_panels_list:
+  for judge in panel:
+    if 'jpn' in judge[0] or 'wc2023' in judge[0]:
+      judge[2] = " ".join(judge[2].replace('\xa0', ' ').split('\\'))
+
+flat_data = [judge for panel in judges_panels_list for judge in panel]
+
+judge_panel = pd.DataFrame(flat_data, columns=['competition', 'role', 'judge'])
+show(judge_panel)
