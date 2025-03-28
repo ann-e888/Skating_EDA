@@ -50,3 +50,5 @@ print(len(officials_l))
 
 offcial_country = pd.DataFrame(officials_l, columns=['official', 'country'])
 show(offcial_country)
+
+offcial_country.to_csv('Offical_Country.csv', index=False)

@@ -21,7 +21,7 @@ segments = ['SEG001', 'SEG002', 'SEG003', 'SEG004']
 segments_japan = ['data0130', 'data0150', 'data0230', 'data0250']
 
 def process_url(season, com, seg, seg_jpn):
-  if com in ['wc2023', 'gpjpn2024', 'gpjpn2023', 'gpjpn2022', 'gpjpn2021']:
+  if com in ['wc2023', 'gpjpn2023', 'gpjpn2022', 'gpjpn2021']:
       url = f'https://results.isu.org/results/{season}/{com}/{seg_jpn}.htm'
   else:
       url = f'https://results.isu.org/results/{season}/{com}/{seg}OF.htm'
@@ -88,3 +88,5 @@ flat_data = [judge for panel in judges_panels_list for judge in panel]
 
 judge_panel = pd.DataFrame(flat_data, columns=['competition', 'role', 'judge'])
 show(judge_panel)
+
+judge_panel.to_csv('Judge_Panel.csv', index=False)
