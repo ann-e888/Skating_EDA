@@ -18,6 +18,8 @@ for folder in [pdfs_short, pdf_free]:
   all_paths.extend(paths)
 
 def extract_data(pdf_paths):
+    competition_names = []
+    skaters_per_pdf = [] 
     all_entries = []
     short_entries_num = []
     free_entries_num = []
@@ -27,11 +29,15 @@ def extract_data(pdf_paths):
     for pdf_path in pdf_paths:
         try:
             with pdfplumber.open(pdf_path) as f:
+                competition_name = os.path.splitext(os.path.basename(pdf_path))[0]
+                competition_names.append(competition_name)
+
                 all_page_tables = [page.extract_tables() for page in f.pages]
                 tables = [x for entry in all_page_tables for x in entry]
                 all_entries.extend(tables)
 
                 parent_folder = os.path.basename(os.path.dirname(pdf_path))
+                skaters_per_pdf.append(len(tables))
 
                 if parent_folder == 'short':  
                     short_entries_num.append(len(tables))
@@ -43,9 +49,9 @@ def extract_data(pdf_paths):
         except Exception as e:
             print(f"Error processing {pdf_path}: {e}")
     
-    return all_entries, short_entries_num, free_entries_num, pdf_table_map
+    return competition_names, skaters_per_pdf, all_entries, short_entries_num, free_entries_num, pdf_table_map
 
-single_entries, short_entries_num, free_entries_num, pdf_table_map = extract_data(all_paths)
+competition_names, skaters_per_pdf, single_entries, short_entries_num, free_entries_num, pdf_table_map = extract_data(all_paths)
 print(sum(short_entries_num))
 print(sum(free_entries_num))
 
@@ -156,14 +162,24 @@ for i in range(len(skaters_list)):
 cumulative_indices = np.cumsum([0] + skater_segment_sizes)
 
 data = []
+pdf_index = 0  
+entry_count = 0
+
 for i, skater in enumerate(skaters_list):
     start_idx = cumulative_indices[i]
     end_idx = cumulative_indices[i + 1]
     
     performances_for_skater = skater_performance[start_idx:end_idx]
 
+    if entry_count >= skaters_per_pdf[pdf_index]:  
+        pdf_index += 1  
+        entry_count = 0
+
+    competition = competition_names[pdf_index] 
+
     for performance in performances_for_skater:
         row = skater.copy()
+        row['competition'] = competition
         row['element'] = performance[0]
         row['call'] = performance[1]
         row['base_value'] = performance[2][0]
@@ -175,5 +191,8 @@ for i, skater in enumerate(skaters_list):
 
 df = pd.DataFrame(data)
 show(df)
+
+df.to_csv('Competition_Results.csv', index=False)
+
 
 
