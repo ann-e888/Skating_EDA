@@ -192,7 +192,7 @@ for i, skater in enumerate(skaters_list):
 df = pd.DataFrame(data)
 show(df)
 
-df.to_csv('Competition_Results.csv', index=False)
+df.to_csv('csv files/Competition_Results.csv', index=False)
 
 
 

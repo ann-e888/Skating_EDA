@@ -1,6 +1,7 @@
 import pandas as pd
 import requests
 import os
+import re
 
 from bs4 import BeautifulSoup
 from pandasgui import show
@@ -81,6 +82,8 @@ for url in urls:
 
 for panel in judges_panels_list:
   for judge in panel:
+    judge[0] = judge[0].replace('\\', '')
+    judge[2] = re.sub(r'\b(Ms\.|Mr\.)\s*', '', judge[2]).strip()
     if 'jpn' in judge[0] or 'wc2023' in judge[0]:
       judge[2] = " ".join(judge[2].replace('\xa0', ' ').split('\\'))
 
@@ -89,4 +92,4 @@ flat_data = [judge for panel in judges_panels_list for judge in panel]
 judge_panel = pd.DataFrame(flat_data, columns=['competition', 'role', 'judge'])
 show(judge_panel)
 
-judge_panel.to_csv('Judge_Panel.csv', index=False)
+judge_panel.to_csv('csv files/Judge_Panel.csv', index=False)
