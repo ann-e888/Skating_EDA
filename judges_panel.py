@@ -63,7 +63,7 @@ count = 0
 
 for season in seasons:
   for com in competitions:
-    if com in ['wc2023', 'gpjpn2024', 'gpjpn2023', 'gpjpn2022', 'gpjpn2021']:
+    if com in ['wc2023', 'gpjpn2023', 'gpjpn2022', 'gpjpn2021']:
       for seg_jpn in segments_japan:  
         urls.append(process_url(season, com, None, seg_jpn))
     else:
@@ -72,7 +72,7 @@ for season in seasons:
 
 for url in urls:
   judges = get_judges_panel(url)
-  print(judges)
+  #print(judges)
 
   if judges:
     judges_panels_list.append(judges)
