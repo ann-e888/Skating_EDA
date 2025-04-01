@@ -54,6 +54,7 @@ def extract_data(pdf_paths):
 competition_names, skaters_per_pdf, single_entries, short_entries_num, free_entries_num, pdf_table_map = extract_data(all_paths)
 print(sum(short_entries_num))
 print(sum(free_entries_num))
+print(competition_names)
 
 
 for i in range(len(single_entries)):
@@ -171,11 +172,21 @@ for i, skater in enumerate(skaters_list):
     
     performances_for_skater = skater_performance[start_idx:end_idx]
 
+    print(f"\nProcessing skater {i + 1}/{len(skaters_list)}")
+    print(f"Before update - PDF Index: {pdf_index}, Entry Count: {entry_count}")
+
     if entry_count >= skaters_per_pdf[pdf_index]:  
         pdf_index += 1  
         entry_count = 0
+        print(f"Incrementing PDF Index: {pdf_index}")
 
-    competition = competition_names[pdf_index] 
+    # Ensure valid indexing
+    if pdf_index < len(competition_names):
+        competition = competition_names[pdf_index]
+    else:
+        competition = "Unknown Competition"
+
+    print(f"Assigned Competition: {competition}")
 
     for performance in performances_for_skater:
         row = skater.copy()
@@ -188,6 +199,10 @@ for i, skater in enumerate(skaters_list):
             row[f"Judge No.{j+1}"] = score
         row['final_element_score'] = performance[2][3]
         data.append(row)
+
+    entry_count += 1  
+    print(f"After update - PDF Index: {pdf_index}, Entry Count: {entry_count}")
+
 
 df = pd.DataFrame(data)
 show(df)
