@@ -57,6 +57,7 @@ print(sum(free_entries_num))
 print(competition_names)
 
 
+
 for i in range(len(single_entries)):
     if len(single_entries[i]) <= 2:
         print(f"Problem with table {i} in a PDF {pdf_table_map[i]}. It has only {len(single_entries[i])} sublists.")
@@ -73,6 +74,20 @@ for entry in single_entries:
   element_data = entry[1][0].split('\n')[1:-1]
   single_entries_updated.append([entry[0], element_data])
   extracted_elements.append(element_data)
+
+''' After checkup it came out that there are files, where in the free program one skater has a list of 13 elements instead of 12,
+the 12th one being empty, which broke the alignment for the following skaters, therefore the check. '''
+
+for i, element_list in enumerate(extracted_elements):
+    if len(element_list) > 12:
+        print(i, element_list)
+        for el in element_list:
+          if len(el.split()) < 14:
+            extracted_elements[i].remove(el)
+            print(extracted_elements[i])
+            print(single_entries_updated[i])
+          
+
 
 skaters_list = []
 for element in single_entries_updated:
@@ -172,21 +187,20 @@ for i, skater in enumerate(skaters_list):
     
     performances_for_skater = skater_performance[start_idx:end_idx]
 
-    print(f"\nProcessing skater {i + 1}/{len(skaters_list)}")
-    print(f"Before update - PDF Index: {pdf_index}, Entry Count: {entry_count}")
+    # print(f"\nProcessing skater {i + 1}/{len(skaters_list)}")
+    # print(f"Before update - PDF Index: {pdf_index}, Entry Count: {entry_count}")
 
     if entry_count >= skaters_per_pdf[pdf_index]:  
         pdf_index += 1  
         entry_count = 0
-        print(f"Incrementing PDF Index: {pdf_index}")
+        # print(f"Incrementing PDF Index: {pdf_index}")
 
-    # Ensure valid indexing
     if pdf_index < len(competition_names):
         competition = competition_names[pdf_index]
     else:
         competition = "Unknown Competition"
 
-    print(f"Assigned Competition: {competition}")
+    # print(f"Assigned Competition: {competition}")
 
     for performance in performances_for_skater:
         row = skater.copy()
@@ -201,7 +215,7 @@ for i, skater in enumerate(skaters_list):
         data.append(row)
 
     entry_count += 1  
-    print(f"After update - PDF Index: {pdf_index}, Entry Count: {entry_count}")
+    # print(f"After update - PDF Index: {pdf_index}, Entry Count: {entry_count}")
 
 
 df = pd.DataFrame(data)
