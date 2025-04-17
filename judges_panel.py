@@ -6,18 +6,19 @@ import re
 from bs4 import BeautifulSoup
 from pandasgui import show
 
-seasons = ['season2425', 'season2324', 'season2223', 'season2122']
-competitions = ['fc2025', 'fc2024', 'fc2023', 'fc2022', 'fc2021',
-                'ec2025', 'ec2024', 'ec2023', 'ec2022', 'ec2021',
+seasons = ['season2425', 'season2324', 'season2223', 'season2122', 'season2021', 'season1920']
+competitions = ['fc2025', 'fc2024', 'fc2023', 'fc2022', 'fc2021', 'fc2020',
+                'ec2025', 'ec2024', 'ec2023', 'ec2022', 'ec2021', 'ec2020',
                 'wc2025', 'wc2024', 'wc2023', 'wc2022', 'wc2021',
-                'gpusa2024', 'gpusa2023', 'gpusa2022', 'gpusa2021',
-                'gpcan2024', 'gpcan2023', 'gpcan2022', 'gpcan2021',
-                'gpfra2024', 'gpfra2023', 'gpfra2022', 'gpfra2021',
-                'gpjpn2024', 'gpjpn2023', 'gpjpn2022', 'gpjpn2021',
-                'gpfin2024', 'gpfin2023', 'gpfin2022', 'gpfin2021',
-                'gpchn2024', 'gpchn2023', 'gpchn2022', 'gpchn2021',
-                'gpf2024', 'gpf2023', 'gpf2022', 'gpf2021',
-                'gprus2021', 'gpita2021']
+                'gpusa2024', 'gpusa2023', 'gpusa2022', 'gpusa2021', 'gpusa2019',
+                'gpcan2024', 'gpcan2023', 'gpcan2022', 'gpcan2021', 'gpcan2019',
+                'gpfra2024', 'gpfra2023', 'gpfra2022', 'gpfra2021', 'gpfra2019',
+                'gpjpn2024', 'gpjpn2023', 'gpjpn2022', 'gpjpn2021', 'gpjpn2019',
+                'gpfin2024', 'gpfin2023', 'gpfin2022', 'gpfin2021', 'gpfin2019',
+                'gpchn2024', 'gpchn2023', 'gpchn2022', 'gpchn2021', 'gpchn2019',
+                'gpf2024', 'gpf2023', 'gpf2022', 'gpf2021', 'gpf1920',
+                'gprus2021', 'gprus2019', 
+                'gpita2021']
 segments = ['SEG001', 'SEG002', 'SEG003', 'SEG004']
 segments_japan = ['data0130', 'data0150', 'data0230', 'data0250']
 
@@ -72,7 +73,7 @@ for season in seasons:
 
 for url in urls:
   judges = get_judges_panel(url)
-  #print(judges)
+  print(judges)
 
   if judges:
     judges_panels_list.append(judges)
