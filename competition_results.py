@@ -57,7 +57,6 @@ print(sum(free_entries_num))
 print(competition_names)
 
 
-
 for i in range(len(single_entries)):
     if len(single_entries[i]) <= 2:
         print(f"Problem with table {i} in a PDF {pdf_table_map[i]}. It has only {len(single_entries[i])} sublists.")
@@ -87,7 +86,6 @@ for i, element_list in enumerate(extracted_elements):
             print(extracted_elements[i])
             print(single_entries_updated[i])
           
-
 
 skaters_list = []
 for element in single_entries_updated:
@@ -146,7 +144,7 @@ def process_element_data(elements):
 
         final_value = float(parts[-1])
         goe = float(parts[-11])
-        judges_scores = [float(score) if score != '-' else 'None' for score in parts[-10:-2]]
+        judges_scores = [float(score) if score != '-' else 'None' for score in parts[-10:-1]]
         base_value = round(final_value - abs(goe) if goe > 0 else final_value + abs(goe), 2)
 
         processed_elements.append(element)
